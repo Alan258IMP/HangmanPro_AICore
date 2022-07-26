@@ -45,6 +45,14 @@ class Hangman:
         # TODO 2: Print two message upon initialization:
         # 1. "The mystery word has {len(self.word)} characters" (The number of letters is NOT the UNIQUE number of letters)
         # 2. {word_guessed}
+        self.word = random.choice(word_list)
+        self.num_letters = len(self.word)
+        self.word_guessed = ['_'] * self.num_letters
+        self.num_lives = num_lives
+        self.list_letters = []
+        # Print messages upon initialization
+        print("The mystery word has %.d characters" %(len(self.word)))
+        print(self.word_guessed)
         pass
 
     def check_letter(self, letter) -> None:
@@ -64,6 +72,14 @@ class Hangman:
         # TODO 3: If the letter is in the word, the number of UNIQUE letters in the word that have not been guessed yet has to be reduced by 1
         # TODO 3: If the letter is not in the word, reduce the number of lives by 1
         # Be careful! A word can contain the same letter more than once. TIP: Take a look at the index() method in the string class
+        self.list_letters.append(letter)
+        if letter in self.word:
+            print('Nice! ' + letter + ' is in the word.')
+            #replace!
+        else:
+            print('Sorry, ' + letter + ' is not in the word.')
+            self.num_lives -= 1
+            print('You have %d lives left.' %(self.num_lives))
         pass
 
     def ask_letter(self):
@@ -76,15 +92,17 @@ class Hangman:
         # TODO 1: Ask the user for a letter iteratively until the user enters a valid letter
         # TODO 1: Assign the letter to a variable called `letter`
         # TODO 1: The letter has to comply with the following criteria: It has to be a single character. If it is not, print "Please, enter just one character"
+        # TODO 2. It has to be a letter that has not been tried yet. Use the list_letters attribute to check this. If it has been tried, print "{letter} was already tried".
+        # TODO 3: If the letter is valid, call the check_letter method
         while True:
             letter = input('Please enter a letter')
             #if type(letter) != str:
             #    raise TypeError('Please, enter a letter') - this error handler already exist for input() function
             if len(letter) != 1:
                 print('Please, enter just one character')
+            elif letter in self.list_letters:
+                print(letter + ' was already tried')
             else: break
-        # TODO 2. It has to be a letter that has not been tried yet. Use the list_letters attribute to check this. If it has been tried, print "{letter} was already tried".
-        # TODO 3: If the letter is valid, call the check_letter method
         pass
 
 def play_game(word_list):

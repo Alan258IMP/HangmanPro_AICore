@@ -1,10 +1,79 @@
 #%%
+# -*- coding: UTF-8 -*-
+# Alan Li
+# AICore 2022
+# All rights reserved
 '''
 Make sure you complete all the TODOs in this file.
 The prints have to contain the same text as indicated, don't add any more prints,
 or you will get 0 for this assignment.
 '''
 import random
+
+# This is a global variable
+hangman_pictures = [
+    '''
+       +----+
+       |    |
+       |    
+       |    
+       | 
+       |    
+       |   
+    =======
+    ''', u'''
+       +----+
+       |    |
+       |   \U0001f604
+       |    
+       | 
+       |    
+       |   
+    =======
+    ''', u'''
+       +----+
+       |    |
+       |   \U0001F610
+       |    |
+       | 
+       |     
+       |   
+    =======
+    ''', u'''
+       +----+
+       |    |
+       |   \U0001F628
+       |   /|
+       | 
+       |     
+       |   
+    =======
+    ''', u'''
+       +----+
+       |    |
+       |   \U0001F62B
+       |   /|\ 
+       |   
+       |     
+       |   
+    =======
+    ''', u'''
+       +----+
+       |    |
+       |   \U0001F607
+       |   /|\ 
+       |   / \ 
+       |     
+       |   
+    =======
+    '''
+]
+
+listof_word_lists = [
+    open('hangman/mylist_110.txt').read().split(" "),
+    [word for word in open('hangman/wordlist_10000.txt').read().split(" ") if len(word) >= 4],
+    'apple banana orange pear strawberry watermelon'.split(" ")
+]
 
 class Hangman:
     '''
@@ -52,7 +121,6 @@ class Hangman:
         self.num_lives = num_lives
         self.list_letters = []
         # Print messages upon initialization
-        print('Welcome to the game Hangman!')
         print("The mystery word has %.d characters" %(len(self.word)))
         print(self.word_guessed)
         pass
@@ -87,6 +155,10 @@ class Hangman:
             print('Sorry, ' + letter + ' is not in the word.')
             self.num_lives -= 1
             print('You have %d lives left.' %(self.num_lives))
+            # Addition: print the hangman here
+            # But not compatitable with Hangman classes of more than 5
+            # As we only have five pictures in the hangman_pictures
+            print(hangman_pictures[-(self.num_lives+1)])
 
     def ask_letter(self):
         '''
@@ -114,7 +186,18 @@ class Hangman:
             self.check_letter(letter)
             self.list_letters.append(letter) # Add to the list of letters already tried
 
-def play_game(word_list):
+def play_game():
+    # Select the word list (extra)
+    print('Welcome to the game Hangman!')
+    print('Please select the word list you wanna play with:')
+    while True:
+        word_list_choice = input('1: Custom 110-word list 2: 10000-word list from mit.edu 3: 6-word list for debugging')
+        if word_list_choice in ['1','2','3']:
+            word_list = listof_word_lists[int(word_list_choice) - 1]
+            print(int(word_list_choice) - 1)
+            break
+        else:
+            print('please input 1, 2 or 3')
     # As an aid, part of the code is already provided:
     game = Hangman(word_list, num_lives=5)
     # TODO 1: To test this task, you can call the ask_letter method
@@ -123,6 +206,8 @@ def play_game(word_list):
     # TODO 4: Iteratively ask the user for a letter until the user guesses the word or runs out of lives
     # If the user guesses the word, print "Congratulations, you won!"
     # If the user runs out of lives, print "You ran out of lives. The word was {word}"
+    num_lives_setting = game.num_lives
+    print(hangman_pictures[0])
     while True:
         game.ask_letter()
         if game.num_lives == 0:
@@ -134,6 +219,5 @@ def play_game(word_list):
     pass
 
 if __name__ == '__main__':
-    word_list = ['apple', 'banana', 'orange', 'pear', 'strawberry', 'watermelon']
-    play_game(word_list)
+    play_game()
 # %%

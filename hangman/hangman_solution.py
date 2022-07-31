@@ -137,11 +137,6 @@ class Hangman:
             The letter to be checked
 
         '''
-        # TODO 3: Check if the letter is in the word. TIP: You can use the lower() method to convert the letter to lowercase
-        # TODO 3: If the letter is in the word, replace the '_' in the word_guessed list with the letter
-        # TODO 3: If the letter is in the word, the number of UNIQUE letters in the word that have not been guessed yet has to be reduced by 1
-        # TODO 3: If the letter is not in the word, reduce the number of lives by 1
-        # Be careful! A word can contain the same letter more than once. TIP: Take a look at the index() method in the string class
         letter = letter.lower() # Convert this to lowercase, making the rest of the code case insensitive
         self.list_letters.append(letter)
         if letter in self.word:
@@ -158,7 +153,8 @@ class Hangman:
             # Addition: print the hangman here
             # But not compatitable with Hangman classes of more than 5
             # As we only have five pictures in the hangman_pictures
-            print(hangman_pictures[-(self.num_lives+1)])
+            if self.num_lives <= 5:
+                print(hangman_pictures[-(self.num_lives+1)])
 
     def ask_letter(self):
         '''
@@ -166,22 +162,20 @@ class Hangman:
         1. If the letter has already been tried
         2. If the character is a single character
         If it passes both checks, it calls the check_letter method.
+        Enter '88224646baba' to enable cheat mode and get 27 lives!
         '''
-        # TODO 1: Ask the user for a letter iteratively until the user enters a valid letter
-        # TODO 1: Assign the letter to a variable called `letter`
-        # TODO 1: The letter has to comply with the following criteria: It has to be a single character. If it is not, print "Please, enter just one character"
-        # TODO 2. It has to be a letter that has not been tried yet. Use the list_letters attribute to check this. If it has been tried, print "{letter} was already tried".
-        # TODO 3: If the letter is valid, call the check_letter method
         letter = input('Please enter a letter')
-        letter = letter.lower() 
-        #if type(letter) != str:
-        #    raise TypeError('Please, enter a letter') - this error handler already exist for input() function
-        if len(letter) != 1:
+        letter = letter.lower()
+        if letter == '88224646baba':
+            # Cheat mode
+            self.num_lives = 27
+            print('Cheat mode activated: Now you have 27 lives!')
+        elif len(letter) != 1:
             print('Please, enter just ONE character')
         elif letter in self.list_letters:
             print(letter + ' was already tried')
         elif letter not in 'abcdefghijklmnopqrstuvwxyz':
-            print('Please, enter an English letter in the alphabet')
+            print('Please, enter a letter in the English alphabet')
         else:
             self.check_letter(letter)
             self.list_letters.append(letter) # Add to the list of letters already tried
@@ -189,34 +183,29 @@ class Hangman:
 def play_game():
     # Select the word list (extra)
     print('Welcome to the game Hangman!')
-    print('Please select the word list you wanna play with:')
+
     while True:
-        word_list_choice = input('1: Custom 110-word list 2: 10000-word list from mit.edu 3: 6-word list for debugging')
-        if word_list_choice in ['1','2','3']:
-            word_list = listof_word_lists[int(word_list_choice) - 1]
-            print(int(word_list_choice) - 1)
-            break
-        else:
-            print('please input 1, 2 or 3')
-    # As an aid, part of the code is already provided:
-    game = Hangman(word_list, num_lives=5)
-    # TODO 1: To test this task, you can call the ask_letter method
-    # TODO 2: To test this task, upon initialization, two messages should be printed
-    # TODO 3: To test this task, you call the ask_letter method and check if the letter is in the word
-    # TODO 4: Iteratively ask the user for a letter until the user guesses the word or runs out of lives
-    # If the user guesses the word, print "Congratulations, you won!"
-    # If the user runs out of lives, print "You ran out of lives. The word was {word}"
-    num_lives_setting = game.num_lives
-    print(hangman_pictures[0])
-    while True:
-        game.ask_letter()
-        if game.num_lives == 0:
-            print("You ran out of lives. The word was: " + game.word)
-            break
-        if game.word == ''.join(game.word_guessed):
-            print("Congratulations, you won!! The word is " + game.word)
-            break
-    pass
+        print('Please select the word list you wanna play with:')
+        while True:
+            word_list_choice = input('1: Custom 110-word list 2: 10000-word list from mit.edu 3: 6-word list for debugging')
+            if word_list_choice in ['1','2','3']:
+                word_list = listof_word_lists[int(word_list_choice) - 1]
+                print(int(word_list_choice) - 1)
+                break
+            else:
+                print('please choose 1, 2 or 3')
+        game = Hangman(word_list, num_lives=5)
+        print(hangman_pictures[0])
+        while True:
+            game.ask_letter()
+            if game.num_lives == 0:
+                print("You ran out of lives. The word was: " + game.word)
+                break
+            if game.word == ''.join(game.word_guessed):
+                print("Congratulations, you won!! The word is " + game.word)
+                break
+        replay = input('Enter r to play again or enter anything else to exit')
+        if replay != 'r': break
 
 if __name__ == '__main__':
     play_game()

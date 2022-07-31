@@ -63,6 +63,3 @@ Note that all words with 3 letters or shorter in the 10000-word list are omitted
 3. A replay function: At the end of the game (when the player correctly guessed the word or run out of lives), instead of directly exiting the game, the player can enter r to replay the game.
 
 4. A cheat mode: Enter "88224646baba" to set number of lives to 27, which effectively makes the player invincible.
-
-
-
